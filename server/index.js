@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 const connectDB = require("./db/connect");
 const userRouter = require("./routes/userRoutes");
 const authRouter = require("./routes/authRoutes");
-const errorHandler = require("./middleware/errorHandler");
+const errorInfo = require("./middleware/errorHandler");
 dotenv.config();
 // mongoose.connect(
 //   ""
@@ -13,7 +13,7 @@ const port = process.env.PORT || 5000;
 app.use(express.json());
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
-app.use(errorHandler);
+app.use(errorInfo);
 const start = async () => {
   try {
     await connectDB(process.env.MONGO_URL);

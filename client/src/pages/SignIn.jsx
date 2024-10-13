@@ -1,13 +1,17 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios"; // Import axios
-
+import { useDispatch, useSelector } from "react-redux";
+import {
+  signInStart,
+  signInFailure,
+  signInSuccess,
+} from "../redux/user/userSlice";
 export default function SignIn() {
-  const [formData, setFormData] = useState({});
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState();
+  const { loading, error } = useSelector((state) => state.user);
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -39,7 +43,7 @@ export default function SignIn() {
       // setLoading(false);
       // navigate("/sign-in");
 
-      setLoading(true);
+      dispatch(signInStart());
 
       const response = await axios.post("/api/auth/signin", formData, {
         headers: {
@@ -48,21 +52,19 @@ export default function SignIn() {
       });
 
       if (response.status !== 200) {
-        setError(response.data.message);
-        setLoading(false);
+        dispatch(signInFailure(response.data.message));
         return;
       }
 
-      setError(null);
-      setLoading(false);
-      console.log("HERE");
+      dispatch(signInSuccess(response.data));
       navigate("/");
     } catch (error) {
-      console.log("ok");
-      setError(
-        error.response?.data?.message || "An error occurred. Please try again."
+      dispatch(
+        signInFailure(
+          error.response?.data?.message ||
+            "An error occurred. Please try again."
+        )
       );
-      setLoading(false);
     }
   };
 

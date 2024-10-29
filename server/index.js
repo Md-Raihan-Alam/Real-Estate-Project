@@ -4,6 +4,7 @@ const connectDB = require("./db/connect");
 const userRouter = require("./routes/userRoutes");
 const authRouter = require("./routes/authRoutes");
 const errorInfo = require("./middleware/errorHandler");
+const cookieParser = require("cookie-parser");
 dotenv.config();
 // mongoose.connect(
 //   ""
@@ -11,6 +12,7 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;
 app.use(express.json());
+app.use(cookieParser());
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 app.use(errorInfo);

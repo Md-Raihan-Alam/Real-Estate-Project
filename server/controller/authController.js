@@ -46,11 +46,7 @@ const signin = async (req, res, next) => {
         sameSite: "strict",
       })
       .status(200)
-      .json({
-        success: true,
-        user: userWithoutPassword,
-        token,
-      });
+      .json(userWithoutPassword);
   } catch (error) {
     next(error);
   }
@@ -76,11 +72,7 @@ const google = async (req, res, next) => {
           sameSite: "strict",
         })
         .status(200)
-        .json({
-          success: true,
-          user: userWithoutPassword,
-          token,
-        });
+        .json(userWithoutPassword);
     } else {
       // Generate a random password
       const generatePassword = Math.random().toString(36).slice(-8); // Fixed generation logic
@@ -112,19 +104,23 @@ const google = async (req, res, next) => {
           sameSite: "strict",
         })
         .status(200)
-        .json({
-          success: true,
-          user: userWithoutPassword,
-          token,
-        });
+        .json(userWithoutPassword);
     }
   } catch (error) {
     next(error);
   }
 };
-
+const signout = async (req, res, next) => {
+  try {
+    res.clearCookie("access_token");
+    res.status(200).json("User has been logged out!");
+  } catch (error) {
+    next(error);
+  }
+};
 module.exports = {
   signup,
   signin,
   google,
+  signout,
 };

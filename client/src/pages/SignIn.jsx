@@ -23,27 +23,6 @@ export default function SignIn() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // setLoading(true);
-      // const response = await fetch("/api/auth/signup", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify(formData),
-      // });
-
-      // const data = await response.json();
-
-      // if (!response.ok) {
-      //   setError(data.message); // Handle the error response properly
-      //   setLoading(false);
-      //   return;
-      // }
-
-      // setError(null);
-      // setLoading(false);
-      // navigate("/sign-in");
-
       dispatch(signInStart());
 
       const response = await axios.post("/api/auth/signin", formData, {

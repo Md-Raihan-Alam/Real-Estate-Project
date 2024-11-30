@@ -18,16 +18,19 @@ import {
   updateuserSuccess,
   updatUserStart,
 } from "../redux/user/userSlice";
-import axios from "axios"; // Import axios
+import axios from "axios";
+import { Link } from "react-router-dom";
 
 export default function Profile() {
   const { currentUser, error, loading } = useSelector((state) => state.user);
   console.log(currentUser);
+  const [userListings,setUserListings]=useState();
   const fileRef = useRef(null);
   const [file, setFile] = useState(undefined);
   const [filePerc, setFilePerc] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
-  const [fileError, setFileError] = useState("");
+  // const [fileError, setFileError] = useState("");
+  const [showListingerror,setShowListingError]=useState(false);
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [formData, setFormData] = useState({});
   const dispatch = useDispatch();
@@ -67,8 +70,8 @@ export default function Profile() {
   const handleSignout = async () => {
     try {
       dispatch(signoutUserStart);
-      const res = await axios.get(`/api/auth/signout`);
-      const data = await res.json();
+      const {data} = await axios.get(`/api/auth/signout`);
+     
       if (data.success === false) {
         dispatch(signoutUserFailure(response.data));
         return;
@@ -97,7 +100,38 @@ export default function Profile() {
       );
     }
   };
-
+  const handleShowListings=async()=>{
+    try{
+      const {data}=await axios.get(`/api/user/listings/${currentUser._id}`);
+      if(data.success===false)
+      {
+        setShowListingError(true);
+        return ;
+      }
+      setShowListingError(false);
+      setUserListings(data);
+      console.log(data);
+    }catch(error)
+    {
+      console.log(error);
+      setShowListingError(true);
+    }
+   
+  }
+  const handleListingDelete=async(id)=>{
+    try{
+      const {data}=await axios.delete(`/api/listing/delete/${id}`);
+      if(data.success!==true)
+      {
+        console.log(data.message);
+        return;
+      }
+      setUserListings(userListings.filter(listing=>listing._id!==id));
+    }catch(error)
+    {
+      console.log(error);
+    }
+  }
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -184,6 +218,12 @@ export default function Profile() {
         >
           {loading ? "Loading..." : "update"}
         </button>
+        <Link
+          className="bg-green-700 text-white p-3 rouned-lg uppercase text-center hover:opacity-95"
+          to={"/create-listing"}
+        >
+          Create Listing
+        </Link>
       </form>
       <div className="flex justify-between mt-5">
         <span onClick={handleDelete} className="text-red-700 cursor-pointer">
@@ -197,6 +237,31 @@ export default function Profile() {
       <p className="text-green-700 mt-5 ">
         {updateSuccess ? "Profile successfully updated" : ""}
       </p>
+      <button onClick={handleShowListings} className="text-green-700 w-full">Show Listings</button>
+      <p className="text-red-700 mt-5">{
+        showListingerror ? "Error showing listings":""
+        }
+      </p>
+
+      {userListings && userListings.length >0 && 
+      <div className="flex flex-col gap-4">
+        <h1 className="text-center mt-7 text-2xl font-sembold">Your Listings</h1>
+      {userListings.map((listing)=>(
+        <div key={listing._id} className="border rounded-lg p-3 flex justify-between items-center gap-4">
+          <Link to={`/listing/${listing._id}`}>
+            <img src={listing.imageUrls[0]} alt="listing cover" className="h-16 w-17 object-contain rounded-lg"/>
+          </Link>
+          <Link className="flex-1 text-slate-700 font-semibold  hover:underline truncate" to={`/listing/${listing._id}`}>
+            <p className="text-bold">{listing.name}</p>
+          </Link>
+          <div className=" flex flex-col items-center">
+            <button onClick={()=>handleListingDelete(listing._id)} className="text-red-700 hover:underline uppercase">Delete</button>
+            <button className="text-green-700 hover:underline uppercase">Edit</button>
+          </div>
+        </div>
+      ))}
+      </div>
+      }
     </div>
   );
 }

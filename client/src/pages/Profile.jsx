@@ -23,7 +23,7 @@ import { Link } from "react-router-dom";
 
 export default function Profile() {
   const { currentUser, error, loading } = useSelector((state) => state.user);
-  console.log(currentUser);
+  
   const [userListings,setUserListings]=useState();
   const fileRef = useRef(null);
   const [file, setFile] = useState(undefined);

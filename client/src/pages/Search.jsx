@@ -67,7 +67,6 @@ const Search = () => {
   }
   const handleSubmit=(e)=>{
     e.preventDefault();
-    console.log
     const urlParams=new URLSearchParams();
     urlParams.set("searchTerm",sidebarData.searchTerm);
     urlParams.set("type",sidebarData.type);

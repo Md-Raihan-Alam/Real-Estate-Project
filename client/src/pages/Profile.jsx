@@ -70,9 +70,9 @@ export default function Profile() {
   const handleSignout = async () => {
     try {
       dispatch(signoutUserStart);
-      const {data} = await axios.get(`https://real-estate-project-server.onrender.com/api/auth/signout`);
+      const response = await axios.get(`https://real-estate-project-server.onrender.com/api/auth/signout`);
      
-      if (data.success === false) {
+      if (response.data.success === false) {
         dispatch(signoutUserFailure(response.data));
         return;
       }

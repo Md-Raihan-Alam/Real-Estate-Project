@@ -42,7 +42,7 @@ export default function SignUp() {
 
       setLoading(true);
 
-      const response = await axios.post("/api/auth/signup", formData, {
+      const response = await axios.post("https://real-estate-project-server.onrender.com/api/auth/signup", formData, {
         headers: {
           "Content-Type": "application/json",
         },

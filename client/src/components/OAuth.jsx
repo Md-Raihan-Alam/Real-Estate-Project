@@ -16,7 +16,7 @@ const OAuth = () => {
       const auth = getAuth(app);
       const result = await signInWithPopup(auth, provider);
 
-      const res = await axios.post("api/auth/google", {
+      const res = await axios.post("https://real-estate-project-server.onrender.com/api/auth/google", {
         name: result.user.displayName,
         email: result.user.email,
         photo: result.user.photoURL,

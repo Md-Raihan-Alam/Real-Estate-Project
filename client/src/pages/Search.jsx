@@ -40,7 +40,7 @@ const Search = () => {
         setLoading(true);
         setShowMore(false);
         const searchQuery=urlParams.toString();
-        const {data}=await axios.get(`/api/listing/get?${searchQuery}`);
+        const {data}=await axios.get(`https://real-estate-project-server.onrender.com/api/listing/get?${searchQuery}`);
         if(data.length>8)
         {
           setShowMore(true);
@@ -84,7 +84,7 @@ const Search = () => {
     const urlParams=new URLSearchParams(location.search);
     urlParams.set("startIndex",startIndex);
     const searchQuery=urlParams.toString();
-    const {data}=await axios.get(`/api/listing/get?${searchQuery}`);
+    const {data}=await axios.get(`https://real-estate-project-server.onrender.com/api/listing/get?${searchQuery}`);
     if(data.length<9)
     {
       setShowMore(false);

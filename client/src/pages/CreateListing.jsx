@@ -9,6 +9,7 @@ import { app } from "../firebase";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+
 const CreateListing = () => {
   const { currentUser } = useSelector((state) => state.user);
   const [files, setFiles] = useState([]);
@@ -32,6 +33,7 @@ const CreateListing = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [imageUploadError, setImageUploadError] = useState(false);
+
   const storeImage = async (file) => {
     return new Promise((resolve, reject) => {
       const storage = getStorage(app);
@@ -56,6 +58,7 @@ const CreateListing = () => {
       );
     });
   };
+
   const handleImageSubmit = () => {
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
       const promises = [];
@@ -79,16 +82,18 @@ const CreateListing = () => {
           setUploading(false);
         });
     } else {
-      setImageUploadError("you can only upload 6 images per listing");
+      setImageUploadError("You can only upload 6 images per listing");
       setUploading(false);
     }
   };
+
   const handleRemoveImage = (index) => {
     setFormData({
       ...formData,
       imageUrls: formData.imageUrls.filter((_, i) => i !== index),
     });
   };
+
   const handleChange = (e) => {
     if (e.target.id === "sale" || e.target.id === "rent") {
       setFormData({
@@ -117,6 +122,7 @@ const CreateListing = () => {
       });
     }
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -126,7 +132,12 @@ const CreateListing = () => {
         return setError("Discount price must be lower than regular price");
       setLoading(true);
       setError(false);
-      const response = await axios.post("/api/listing/create", formData);
+
+      // Update the API URL here
+      const response = await axios.post(
+        "https://real-estate-project-server.onrender.com/api/listing/create",
+        formData
+      );
       setLoading(false);
 
       if (response.status === false) {
@@ -138,6 +149,7 @@ const CreateListing = () => {
       setLoading(false);
     }
   };
+
   return (
     <main className="p-3 max-w-4xl mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">

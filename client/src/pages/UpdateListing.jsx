@@ -60,7 +60,7 @@ const UpdateListing = () => {
   useEffect(()=>{
     const fetchListing=async()=>{
         const listingId=params.listingId;
-        const {data}=await axios.get(`/api/listing/get/${listingId}`);
+        const {data}=await axios.get(`https://real-estate-project-server.onrender.com/api/listing/get/${listingId}`);
         if(data.success===false)
         {
             console.log(data.message);
@@ -140,7 +140,7 @@ const UpdateListing = () => {
         return setError("Discount price must be lower than regular price");
       setLoading(true);
       setError(false);
-      const response = await axios.post(`/api/listing/update/${params.listingId}`, formData);
+      const response = await axios.post(`https://real-estate-project-server.onrender.com/api/listing/update/${params.listingId}`, formData);
       setLoading(false);
 
       if (response.status === false) {

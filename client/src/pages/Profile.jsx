@@ -148,7 +148,7 @@ export default function Profile() {
       );
 
       if (response.status !== 200) {
-        dispatch(updateUserFailure(data.message));
+        dispatch(updateUserFailure(response.data.message));
         return;
       }
       dispatch(updateuserSuccess(response.data));

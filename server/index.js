@@ -16,7 +16,7 @@ const port = process.env.PORT || 5000;
 const cors = require("cors");
 
 const allowedOrigins = [
-  "https://real-estate-project-eosin-delta.vercel.app",
+  "https://real-estate-project-gold.vercel.app/",
   "http://localhost:5173", // Local development origin
 ];
 

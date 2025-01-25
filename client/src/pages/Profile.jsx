@@ -29,47 +29,47 @@ export default function Profile() {
   const [file, setFile] = useState(undefined);
   const [filePerc, setFilePerc] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
-  // const [fileError, setFileError] = useState("");
-  const [showListingerror, setShowListingError] = useState(false);
+  const [showListingError, setShowListingError] = useState(false);
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [formData, setFormData] = useState({});
   const dispatch = useDispatch();
 
   useEffect(() => {
+    const handleFileUpload = (file) => {
+      const storage = getStorage(app);
+      const fileName = new Date().getTime() + file.name;
+      const storageRef = ref(storage, fileName);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          setFilePerc(Math.round(progress));
+        },
+        () => {
+          setFileUploadError(true);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) =>
+            setFormData({ ...formData, avatar: downloadURL })
+          );
+        }
+      );
+    };
+
     if (file) {
       handleFileUpload(file);
     }
-  }, [file]);
+  }, [file, formData]);
 
-  const handleFileUpload = (file) => {
-    const storage = getStorage(app);
-    const fileName = new Date().getTime() + file.name;
-    const storageRef = ref(storage, fileName);
-    const uploadTask = uploadBytesResumable(storageRef, file);
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        setFilePerc(Math.round(progress));
-      },
-      (error) => {
-        setFileUploadError(true);
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) =>
-          setFormData({ ...formData, avatar: downloadURL })
-        );
-      }
-    );
-  };
-
-  const handleChage = (e) => {
+  const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
+
   const handleSignout = async () => {
     try {
-      dispatch(signoutUserStart);
+      dispatch(signoutUserStart());
       const response = await axios.get(
         `https://real-estate-project-server.onrender.com/api/auth/signout`
       );
@@ -78,13 +78,14 @@ export default function Profile() {
         dispatch(signoutUserFailure(response.data));
         return;
       }
-      dispatch(signoutUserSuccess);
+      dispatch(signoutUserSuccess());
     } catch (error) {
       dispatch(
         signoutUserFailure(error.response?.data?.message || error.message)
       );
     }
   };
+
   const handleDelete = async () => {
     try {
       dispatch(deleteUserStart());
@@ -102,6 +103,7 @@ export default function Profile() {
       );
     }
   };
+
   const handleShowListings = async () => {
     try {
       const { data } = await axios.get(
@@ -113,19 +115,17 @@ export default function Profile() {
       }
       setShowListingError(false);
       setUserListings(data);
-      console.log(data);
     } catch (error) {
-      console.log(error);
       setShowListingError(true);
     }
   };
+
   const handleListingDelete = async (id) => {
     try {
       const { data } = await axios.delete(
         `https://real-estate-project-server.onrender.com/api/listing/delete/${id}`
       );
       if (data.success !== true) {
-        console.log(data.message);
         return;
       }
       setUserListings(userListings.filter((listing) => listing._id !== id));
@@ -133,6 +133,7 @@ export default function Profile() {
       console.log(error);
     }
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -153,7 +154,6 @@ export default function Profile() {
         return;
       }
       dispatch(updateuserSuccess(response.data));
-
       setUpdateSuccess(true);
     } catch (error) {
       dispatch(
@@ -196,14 +196,14 @@ export default function Profile() {
           id="username"
           defaultValue={currentUser.username}
           className="border p-3 rounded-lg"
-          onChange={handleChage}
+          onChange={handleChange}
         />
         <input
           type="email"
           placeholder="email"
           id="email"
           defaultValue={currentUser.email}
-          onChange={handleChage}
+          onChange={handleChange}
           className="border p-3 rounded-lg"
         />
         <input
@@ -211,7 +211,7 @@ export default function Profile() {
           placeholder="password"
           id="password"
           className="border p-3 rounded-lg"
-          onChange={handleChage}
+          onChange={handleChange}
         />
         <button
           disabled={loading}
@@ -220,7 +220,7 @@ export default function Profile() {
           {loading ? "Loading..." : "update"}
         </button>
         <Link
-          className="bg-green-700 text-white p-3 rouned-lg uppercase text-center hover:opacity-95"
+          className="bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:opacity-95"
           to={"/create-listing"}
         >
           Create Listing
@@ -234,20 +234,19 @@ export default function Profile() {
           Sign out
         </span>
       </div>
-      <p className="text-red-700 mt-5 ">{error ? error : ""}</p>
-      <p className="text-green-700 mt-5 ">
+      <p className="text-red-700 mt-5">{error || ""}</p>
+      <p className="text-green-700 mt-5">
         {updateSuccess ? "Profile successfully updated" : ""}
       </p>
       <button onClick={handleShowListings} className="text-green-700 w-full">
         Show Listings
       </button>
       <p className="text-red-700 mt-5">
-        {showListingerror ? "Error showing listings" : ""}
+        {showListingError ? "Error showing listings" : ""}
       </p>
-
       {userListings && userListings.length > 0 && (
         <div className="flex flex-col gap-4">
-          <h1 className="text-center mt-7 text-2xl font-sembold">
+          <h1 className="text-center mt-7 text-2xl font-semibold">
             Your Listings
           </h1>
           {userListings.map((listing) => (
@@ -263,12 +262,12 @@ export default function Profile() {
                 />
               </Link>
               <Link
-                className="flex-1 text-slate-700 font-semibold  hover:underline truncate"
+                className="flex-1 text-slate-700 font-semibold hover:underline truncate"
                 to={`/listing/${listing._id}`}
               >
-                <p className="text-bold">{listing.name}</p>
+                <p>{listing.name}</p>
               </Link>
-              <div className=" flex flex-col items-center">
+              <div className="flex flex-col items-center">
                 <button
                   onClick={() => handleListingDelete(listing._id)}
                   className="text-red-700 hover:underline uppercase"

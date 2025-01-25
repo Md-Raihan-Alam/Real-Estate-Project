@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios"; // Import axios
 import OaAuth from "../components/OAuth";
@@ -42,11 +42,15 @@ export default function SignUp() {
 
       setLoading(true);
 
-      const response = await axios.post("https://real-estate-project-server.onrender.com/api/auth/signup", formData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.post(
+        "http://localhost:4000/api/auth/signup",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (response.status !== 201) {
         setError(response.data.message);

@@ -6,18 +6,20 @@ import { Link } from "react-router-dom";
 const Contact = ({ listing }) => {
   const [landlord, setLandlord] = useState(null);
   const [error, setError] = useState(null);
-  const [message, setMessage] = useState(""); 
+  const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
     setMessage(e.target.value);
-  }
+  };
 
   useEffect(() => {
     const fetchLandlord = async () => {
       if (!listing?.userRef) return; // Ensure `userRef` exists
       console.log(listing.userRef);
       try {
-        const response = await axios.get(`https://real-estate-project-server.onrender.com/api/user/${listing.userRef}`);
+        const response = await axios.get(
+          `http://localhost:4000/api/user/${listing.userRef}`
+        );
         setLandlord(response.data);
       } catch (error) {
         console.error("Error fetching landlord:", error);
@@ -34,19 +36,21 @@ const Contact = ({ listing }) => {
       {landlord ? (
         <div className="flex flex-col gap-2">
           <p>
-            Contact <span className="font-semibold">{landlord.username} </span>for <span className="font-semibold">{listing.name.toLowerCase()}</span>
+            Contact <span className="font-semibold">{landlord.username} </span>
+            for{" "}
+            <span className="font-semibold">{listing.name.toLowerCase()}</span>
           </p>
-          <textarea 
-            name="message" 
-            id="message" 
-            rows="2" 
-            placeholder="Enter your message here..." 
-            className="w-full border p-3 rounded-lg" 
-            onChange={handleChange} 
+          <textarea
+            name="message"
+            id="message"
+            rows="2"
+            placeholder="Enter your message here..."
+            className="w-full border p-3 rounded-lg"
+            onChange={handleChange}
             value={message}
           ></textarea>
-          <Link 
-            to={`mailto:${landlord.email}?subject=Regarding ${listing.name}&body=${message}`} 
+          <Link
+            to={`mailto:${landlord.email}?subject=Regarding ${listing.name}&body=${message}`}
             className="bg-slate-700 text-white text-center p-3 uppercase rounded-lg hover:opacity-95"
           >
             Send Message

@@ -25,17 +25,21 @@ export default function SignIn() {
     try {
       dispatch(signInStart());
 
-      const response = await axios.post("https://real-estate-project-server.onrender.com/api/auth/signin", formData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.post(
+        "http://localhost:4000/api/auth/signin",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (response.status !== 200) {
         dispatch(signInFailure(response.data.message));
         return;
       }
-      
+
       dispatch(signInSuccess(response.data));
       navigate("/");
     } catch (error) {

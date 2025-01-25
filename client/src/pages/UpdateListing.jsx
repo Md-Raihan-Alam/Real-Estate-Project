@@ -8,12 +8,12 @@ import {
 import { app } from "../firebase";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { useNavigate,useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 const UpdateListing = () => {
   const { currentUser } = useSelector((state) => state.user);
   const [files, setFiles] = useState([]);
   const navigate = useNavigate();
-  const params=useParams();
+  const params = useParams();
   const [formData, setFormData] = useState({
     imageUrls: [],
     name: "",
@@ -57,19 +57,20 @@ const UpdateListing = () => {
       );
     });
   };
-  useEffect(()=>{
-    const fetchListing=async()=>{
-        const listingId=params.listingId;
-        const {data}=await axios.get(`https://real-estate-project-server.onrender.com/api/listing/get/${listingId}`);
-        if(data.success===false)
-        {
-            console.log(data.message);
-            return ;
-        }
-        setFormData(data);
-    }
+  useEffect(() => {
+    const fetchListing = async () => {
+      const listingId = params.listingId;
+      const { data } = await axios.get(
+        `http://localhost:4000/api/listing/get/${listingId}`
+      );
+      if (data.success === false) {
+        console.log(data.message);
+        return;
+      }
+      setFormData(data);
+    };
     fetchListing();
-  },[params.listingId]);
+  }, [params.listingId]);
   const handleImageSubmit = () => {
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
       const promises = [];
@@ -140,7 +141,10 @@ const UpdateListing = () => {
         return setError("Discount price must be lower than regular price");
       setLoading(true);
       setError(false);
-      const response = await axios.post(`https://real-estate-project-server.onrender.com/api/listing/update/${params.listingId}`, formData);
+      const response = await axios.post(
+        `http://localhost:4000/api/listing/update/${params.listingId}`,
+        formData
+      );
       setLoading(false);
 
       if (response.status === false) {

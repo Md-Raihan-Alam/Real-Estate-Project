@@ -6,7 +6,6 @@ const authRouter = require("./routes/authRoutes");
 const listingRouter = require("./routes/listingRoutes");
 const errorInfo = require("./middleware/errorHandler");
 const cookieParser = require("cookie-parser");
-const cors = require("cors");
 
 dotenv.config();
 
@@ -14,9 +13,22 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // Enable CORS for the specific client
+const cors = require("cors");
+
+const allowedOrigins = [
+  "https://real-estate-project-eosin-delta.vercel.app",
+  "http://localhost:5174", // Local development origin
+];
+
 app.use(
   cors({
-    origin: "https://real-estate-project-eosin-delta.vercel.app",
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true, // Allow cookies to be sent with the request
   })
 );

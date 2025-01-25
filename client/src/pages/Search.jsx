@@ -49,7 +49,7 @@ const Search = () => {
       setShowMore(false);
       const searchQuery = urlParams.toString();
       const { data } = await axios.get(
-        `http://localhost:4000/api/listing/get?${searchQuery}`
+        `https://real-estate-project-server.onrender.com/api/listing/get?${searchQuery}`
       );
       if (data.length > 8) {
         setShowMore(true);
@@ -106,7 +106,7 @@ const Search = () => {
     urlParams.set("startIndex", startIndex);
     const searchQuery = urlParams.toString();
     const { data } = await axios.get(
-      `http://localhost:4000/api/listing/get?${searchQuery}`
+      `https://real-estate-project-server.onrender.com/api/listing/get?${searchQuery}`
     );
     if (data.length < 9) {
       setShowMore(false);

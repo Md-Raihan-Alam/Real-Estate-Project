@@ -43,7 +43,7 @@ export default function SignUp() {
       setLoading(true);
 
       const response = await axios.post(
-        "http://localhost:4000/api/auth/signup",
+        "https://real-estate-project-server.onrender.com/api/auth/signup",
         formData,
         {
           headers: {

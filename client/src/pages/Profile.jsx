@@ -71,7 +71,7 @@ export default function Profile() {
     try {
       dispatch(signoutUserStart);
       const response = await axios.get(
-        `http://localhost:4000/api/auth/signout`
+        `https://real-estate-project-server.onrender.com/api/auth/signout`
       );
 
       if (response.data.success === false) {
@@ -89,7 +89,7 @@ export default function Profile() {
     try {
       dispatch(deleteUserStart());
       const response = await axios.delete(
-        `http://localhost:4000/api/user/delete/${currentUser._id}`
+        `https://real-estate-project-server.onrender.com/api/user/delete/${currentUser._id}`
       );
       if (response.data.success === false) {
         dispatch(deleteUserFailure(response.data.message));
@@ -105,7 +105,7 @@ export default function Profile() {
   const handleShowListings = async () => {
     try {
       const { data } = await axios.get(
-        `http://localhost:4000/api/user/listings/${currentUser._id}`
+        `https://real-estate-project-server.onrender.com/api/user/listings/${currentUser._id}`
       );
       if (data.success === false) {
         setShowListingError(true);
@@ -122,7 +122,7 @@ export default function Profile() {
   const handleListingDelete = async (id) => {
     try {
       const { data } = await axios.delete(
-        `http://localhost:4000/api/listing/delete/${id}`
+        `https://real-estate-project-server.onrender.com/api/listing/delete/${id}`
       );
       if (data.success !== true) {
         console.log(data.message);
@@ -139,7 +139,7 @@ export default function Profile() {
       dispatch(updatUserStart());
 
       const response = await axios.post(
-        `http://localhost:4000/api/user/update/${currentUser._id}`,
+        `https://real-estate-project-server.onrender.com/api/user/update/${currentUser._id}`,
         formData,
         {
           headers: {

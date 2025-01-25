@@ -61,7 +61,7 @@ const UpdateListing = () => {
     const fetchListing = async () => {
       const listingId = params.listingId;
       const { data } = await axios.get(
-        `http://localhost:4000/api/listing/get/${listingId}`
+        `https://real-estate-project-server.onrender.com/api/listing/get/${listingId}`
       );
       if (data.success === false) {
         console.log(data.message);
@@ -142,7 +142,7 @@ const UpdateListing = () => {
       setLoading(true);
       setError(false);
       const response = await axios.post(
-        `http://localhost:4000/api/listing/update/${params.listingId}`,
+        `https://real-estate-project-server.onrender.com/api/listing/update/${params.listingId}`,
         formData
       );
       setLoading(false);

@@ -135,7 +135,7 @@ const CreateListing = () => {
 
       // Update the API URL here
       const response = await axios.post(
-        "http://localhost:4000/api/listing/create",
+        "https://real-estate-project-server.onrender.com/api/listing/create",
         formData
       );
       setLoading(false);

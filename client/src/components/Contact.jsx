@@ -18,7 +18,7 @@ const Contact = ({ listing }) => {
       console.log(listing.userRef);
       try {
         const response = await axios.get(
-          `http://localhost:4000/api/user/${listing.userRef}`
+          `https://real-estate-project-server.onrender.com/api/user/${listing.userRef}`
         );
         setLandlord(response.data);
       } catch (error) {

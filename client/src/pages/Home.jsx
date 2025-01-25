@@ -17,7 +17,7 @@ export default function Home() {
     const fetchOfferListings = async () => {
       try {
         const { data } = await axios.get(
-          "http://localhost:4000/api/listing/get?offer=true&limit=4"
+          "https://real-estate-project-server.onrender.com/api/listing/get?offer=true&limit=4"
         );
         setOfferListings(data);
         fetchRentListings();
@@ -29,7 +29,7 @@ export default function Home() {
     const fetchRentListings = async () => {
       try {
         const { data } = await axios.get(
-          "http://localhost:4000/api/listing/get?type=rent&limit=4"
+          "https://real-estate-project-server.onrender.com/api/listing/get?type=rent&limit=4"
         );
         setRentListings(data);
         fetchSaleListings();
@@ -41,7 +41,7 @@ export default function Home() {
     const fetchSaleListings = async () => {
       try {
         const { data } = await axios.get(
-          "http://localhost:4000/api/listing/get?type=sale&limit=4"
+          "https://real-estate-project-server.onrender.com/api/listing/get?type=sale&limit=4"
         );
         setSaleListings(data);
       } catch (error) {

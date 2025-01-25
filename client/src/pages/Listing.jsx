@@ -24,7 +24,7 @@ const Listing = () => {
         setLoading(true);
         setError(false);
         const response = await axios.get(
-          `http://localhost:4000/api/listing/get/${params.listingId}`
+          `https://real-estate-project-server.onrender.com/api/listing/get/${params.listingId}`
         );
 
         if (response.data.success == false) {

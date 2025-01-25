@@ -17,7 +17,7 @@ const cors = require("cors");
 
 const allowedOrigins = [
   "https://real-estate-project-eosin-delta.vercel.app",
-  "http://localhost:5174", // Local development origin
+  "http://localhost:5173", // Local development origin
 ];
 
 app.use(
